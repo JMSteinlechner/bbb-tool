@@ -175,6 +175,12 @@ public class BaseBBBAPI implements BBBAPI {
                 query.append("&meta_" + key + "=");
                 query.append(URLEncoder.encode(value, getParametersEncoding()));
             }
+
+            // Added analytics callback URL
+            String callbackUrl = "http://localhost:8080/attendance/callback";
+            query.append("&meta_analysis-callback-url=");
+            query.append(URLEncoder.encode(callbackUrl, getParametersEncoding()));
+
             // BSN: Ends
 
             // Composed Welcome message
