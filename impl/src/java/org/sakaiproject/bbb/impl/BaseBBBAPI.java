@@ -56,6 +56,7 @@ import org.sakaiproject.content.api.ContentHostingService;
 import org.sakaiproject.authz.api.SecurityAdvisor;
 import org.sakaiproject.authz.api.SecurityService;
 import org.sakaiproject.util.ResourceLoader;
+import org.sakaiproject.rollcall.tool.AttendanceCallbackController;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -103,6 +104,10 @@ public class BaseBBBAPI implements BBBAPI {
     public final static String APIVERSION_081 = "0.81";
     public final static String APIVERSION_MINIMUM = APIVERSION_063;
     public final static String APIVERSION_LATEST = APIVERSION_081;
+
+    // Callback to Rollcall
+    @Resource
+    private AttendanceCallbackController attendanceCallbackController;
 
     private String baseUrl = "http://127.0.0.1/bigbluebutton";
     private String salt = null;
@@ -175,12 +180,6 @@ public class BaseBBBAPI implements BBBAPI {
                 query.append("&meta_" + key + "=");
                 query.append(URLEncoder.encode(value, getParametersEncoding()));
             }
-
-            // Added analytics callback URL
-            String callbackUrl = "http://localhost:8080/attendance/callback";
-            query.append("&meta_analysis-callback-url=");
-            query.append(URLEncoder.encode(callbackUrl, getParametersEncoding()));
-
             // BSN: Ends
 
             // Composed Welcome message
@@ -371,6 +370,9 @@ public class BaseBBBAPI implements BBBAPI {
             query.append(password);
             query.append(getCheckSumParameterForQuery(APICALL_END, query.toString()));
             doAPICall(APICALL_END, query.toString());
+
+            // Call the rollcall callback
+            attendanceCallbackController.handleCallback(meetingID);
         } catch (BBBException e) {
             if (BBBException.MESSAGEKEY_NOTFOUND.equals(e.getMessageKey())) {
                 // we can safely ignore this one: the meeting is not running

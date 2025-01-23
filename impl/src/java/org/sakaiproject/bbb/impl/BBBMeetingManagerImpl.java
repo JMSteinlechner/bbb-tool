@@ -167,6 +167,7 @@ public class BBBMeetingManagerImpl implements BBBMeetingManager {
 
         // Due the old schema for internal loadbalancing the HostUrl must be not null
         meeting.setHostUrl("");
+        meeting.getMeta().put("analytics-callback-url", "http://localhost:8080/portal/tool/f376733d-af65-4b58-bc09-725c9281bffc/callback");
 
         if (storageManager.storeMeeting(meeting)) {
             // send email notifications to participants

@@ -18,6 +18,17 @@
     <packaging>sakai-component</packaging>
 
     <dependencies>
+        <!-- Rollcall -->
+        <dependency>
+            <groupId>org.sakaiproject.rollcall</groupId>
+            <artifactId>rollcall-tool</artifactId>
+            <version>23-SNAPSHOT</version>
+        </dependency>
+        <!-- Spring -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+        </dependency>
         <!-- BBB -->
         <dependency>
             <groupId>org.sakaiproject.bbb</groupId>
