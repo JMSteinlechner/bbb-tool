@@ -21,7 +21,7 @@
         <!-- Rollcall -->
         <dependency>
             <groupId>org.sakaiproject.rollcall</groupId>
-            <artifactId>rollcall-tool</artifactId>
+            <artifactId>rollcall-impl</artifactId>
             <version>23-SNAPSHOT</version>
         </dependency>
         <!-- Spring -->

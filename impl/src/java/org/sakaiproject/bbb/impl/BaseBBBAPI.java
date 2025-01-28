@@ -56,10 +56,7 @@ import org.sakaiproject.content.api.ContentHostingService;
 import org.sakaiproject.authz.api.SecurityAdvisor;
 import org.sakaiproject.authz.api.SecurityService;
 import org.sakaiproject.util.ResourceLoader;
-import org.sakaiproject.rollcall.tool.AttendanceCallbackController;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.stereotype.Component;
+import org.sakaiproject.rollcall.logic.AttendanceCallbackController;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -76,7 +73,6 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @Getter
-@Component
 public class BaseBBBAPI implements BBBAPI {
 
     // API Server Path
@@ -109,15 +105,11 @@ public class BaseBBBAPI implements BBBAPI {
     public final static String APIVERSION_MINIMUM = APIVERSION_063;
     public final static String APIVERSION_LATEST = APIVERSION_081;
 
-    // Callback to Rollcall
-    @Autowired
-    private AttendanceCallbackController attendanceCallbackController;
-    @Autowired
-    private ApplicationEventPublisher eventPublisher;
-
     private String baseUrl = "http://127.0.0.1/bigbluebutton";
     private String salt = null;
     private Random randomGenerator = new Random(System.currentTimeMillis());
+
+    private AttendanceCallbackController attendanceCallbackController = new AttendanceCallbackController();
 
     @Resource private ServerConfigurationService config;
     @Resource private ContentHostingService contentHostingService;
@@ -377,8 +369,8 @@ public class BaseBBBAPI implements BBBAPI {
             query.append(getCheckSumParameterForQuery(APICALL_END, query.toString()));
             doAPICall(APICALL_END, query.toString());
 
-            // Call the rollcall callback
-            eventPublisher.publishEvent(this.getMeetingInfo(meetingID, password));
+            attendanceCallbackController.handleCallback(this.getMeetingInfo(meetingID, password));
+
         } catch (BBBException e) {
             if (BBBException.MESSAGEKEY_NOTFOUND.equals(e.getMessageKey())) {
                 // we can safely ignore this one: the meeting is not running
