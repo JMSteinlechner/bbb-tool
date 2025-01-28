@@ -35,9 +35,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.HashMap;
 import java.util.Random;
-import java.util.Date;
 import java.util.stream.Collectors;
-import java.text.SimpleDateFormat;
 
 import javax.annotation.Resource;
 import javax.xml.parsers.DocumentBuilder;
@@ -56,7 +54,7 @@ import org.sakaiproject.content.api.ContentHostingService;
 import org.sakaiproject.authz.api.SecurityAdvisor;
 import org.sakaiproject.authz.api.SecurityService;
 import org.sakaiproject.util.ResourceLoader;
-import org.sakaiproject.rollcall.logic.AttendanceCallbackController;
+import org.sakaiproject.rollcall.logic.AttendanceCallbackControllerImpl;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -109,7 +107,7 @@ public class BaseBBBAPI implements BBBAPI {
     private String salt = null;
     private Random randomGenerator = new Random(System.currentTimeMillis());
 
-    private AttendanceCallbackController attendanceCallbackController = new AttendanceCallbackController();
+    private AttendanceCallbackControllerImpl attendanceCallbackControllerImpl = new AttendanceCallbackControllerImpl();
 
     @Resource private ServerConfigurationService config;
     @Resource private ContentHostingService contentHostingService;
@@ -369,7 +367,7 @@ public class BaseBBBAPI implements BBBAPI {
             query.append(getCheckSumParameterForQuery(APICALL_END, query.toString()));
             doAPICall(APICALL_END, query.toString());
 
-            attendanceCallbackController.handleCallback(this.getMeetingInfo(meetingID, password));
+            attendanceCallbackControllerImpl.handleCallback(this.getMeetingInfo(meetingID, password));
 
         } catch (BBBException e) {
             if (BBBException.MESSAGEKEY_NOTFOUND.equals(e.getMessageKey())) {

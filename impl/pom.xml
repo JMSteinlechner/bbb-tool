@@ -24,6 +24,11 @@
             <artifactId>rollcall-impl</artifactId>
             <version>23-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>org.sakaiproject.rollcall</groupId>
+            <artifactId>rollcall-api</artifactId>
+            <version>23-SNAPSHOT</version>
+        </dependency>
         <!-- Spring -->
         <dependency>
             <groupId>org.springframework</groupId>
